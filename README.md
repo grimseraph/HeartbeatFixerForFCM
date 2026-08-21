@@ -62,7 +62,7 @@ Drop your `release.keystore` next to it, then:
 ./gradlew assembleRelease
 ```
 
-The signed APK lands in `app/build/outputs/apk/release/` (default name `app-release.apk`).
+The signed APK lands in `app/build/outputs/apk/release/` as `HeartbeatFixerForFCM-v2.0.0.apk` (the file name embeds the version).
 
 ### One-click release via GitHub Actions
 
@@ -90,7 +90,7 @@ git tag v2.0.0
 git push origin v2.0.0
 ```
 
-Watch the run under the **Actions** tab; when it finishes, the signed `fcm.apk` is attached to the release on the **Releases** page.
+Watch the run under the **Actions** tab; when it finishes, the signed `HeartbeatFixerForFCM-v2.0.0.apk` is attached to the release on the **Releases** page.
 
 ### Known limitations
 
@@ -103,6 +103,7 @@ License
 -------
 
     Copyright 2015 Bin Shao
+    Copyright 2026 grimseraph
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

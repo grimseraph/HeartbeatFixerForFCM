@@ -50,6 +50,14 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
+    // Rename the output APK to embed the app name + version, so the release
+    // artifact is self-describing (e.g. HeartbeatFixerForFCM-v2.0.0.apk).
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = "HeartbeatFixerForFCM-v${variant.versionName}.apk"
+        }
+    }
 }
 
 dependencies {
