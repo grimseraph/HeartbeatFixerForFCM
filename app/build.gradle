@@ -1,134 +1,56 @@
-import java.text.SimpleDateFormat
-import org.apache.commons.codec.binary.Base64
+plugins {
+    id 'com.android.application'
+}
 
-apply plugin: 'com.android.application'
+// Optional release signing: put keystore info in <rootProject>/keystore.properties
+def keystoreProps = new Properties()
+def keystorePropsFile = rootProject.file('keystore.properties')
+if (keystorePropsFile.exists()) {
+    keystorePropsFile.withInputStream { keystoreProps.load(it) }
+}
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.3'
+    namespace 'io.github.grimseraph.heartbeatfixerforgcm'
+    compileSdk 34
 
     defaultConfig {
-        applicationId "io.github.mobodev.heartbeatfixerforgcm"
-        minSdkVersion 14
-        targetSdkVersion 26
-        versionCode 201810600
-        versionName "1.6"
+        applicationId "io.github.grimseraph.heartbeatfixerforgcm"
+        minSdk 21
+        targetSdk 34
+        versionCode 202600700
+        versionName "2.0"
     }
-
-    //noinspection GroovyAssignabilityCheck
-    SimpleDateFormat timeStampFormat = new SimpleDateFormat(
-            "EEE MMMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH); // Don't change it!
-    String timeStamp = timeStampFormat.format(Calendar.getInstance().getTime());
-    String key = null
-    try {
-        key = HEARTBEAT_FIXER_FOR_GCM_IAB_KEY
-    } catch (Exception e) {
-        println "missing HEARTBEAT_FIXER_FOR_GCM_IAB_KEY"
-    }
-    if (key == null) {
-        key = "this-is-a-debug-build-blank-key"
-    }
-    String keySalt = UUID.randomUUID().toString();
-    String keyEncrypted = encryptPublicKey(key, keySalt);
-
-    // Google Play key is very important and better to check it twice
-    // then to get a billion of Force Close reports.
-    println "- - - - - - - - - - - -"
-    println "\u001B[36m\u001B[1mGOOGLE_PLAY_PUBLIC_KEY\u001B[0m: " + key
-    println "- - - - - - - - - - - -"
 
     signingConfigs {
-        release {
-            try {
-                storeFile file(RELEASE_STORE_FILE)
-                storePassword RELEASE_STORE_PASSWORD
-                keyAlias RELEASE_KEY_ALIAS
-                keyPassword RELEASE_KEY_PASSWORD
-            } catch (Exception e) {
-                println "missing release keystore info"
-
-                storeFile file("fake_key_store_file")
-                storePassword "fake_key_store_password"
-                keyAlias "fake_key_alias"
-                keyPassword "fake_key_password"
+        if (keystorePropsFile.exists()) {
+            release {
+                storeFile rootProject.file(keystoreProps['storeFile'])
+                storePassword keystoreProps['storePassword']
+                keyAlias keystoreProps['keyAlias']
+                keyPassword keystoreProps['keyPassword']
             }
         }
     }
 
     buildTypes {
-        debug {
-            buildConfigField "boolean", "MY_DEBUG", "true"
-            buildConfigField "String", "MY_TIME_STAMP", "\"" + timeStamp + "\""
-            buildConfigField "String", "MY_GOOGLE_PLAY_PUBLIC_KEY", "\"" + keyEncrypted + "\""
-            buildConfigField "String", "MY_GOOGLE_PLAY_PUBLIC_KEY_SALT", "\"" + keySalt + "\""
-        }
         release {
-            buildConfigField "boolean", "MY_DEBUG", "false"
-            buildConfigField "String", "MY_TIME_STAMP", "\"" + timeStamp + "\""
-            buildConfigField "String", "MY_GOOGLE_PLAY_PUBLIC_KEY", "\"" + keyEncrypted + "\""
-            buildConfigField "String", "MY_GOOGLE_PLAY_PUBLIC_KEY_SALT", "\"" + keySalt + "\""
-
-            signingConfig signingConfigs.release
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    output.outputFile = new File(output.outputFile.parent, output.outputFile.name.replace(".apk", "-v" + defaultConfig.versionName + "-b" + defaultConfig.versionCode + ".apk"))
-                }
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (keystorePropsFile.exists()) {
+                signingConfig signingConfigs.release
             }
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'uk.co.chrisjenx:calligraphy:2.1.0'
-    compile 'me.grantland:autofittextview:0.2.+'
-    compile 'org.solovyev.android:checkout:0.6.+@aar'
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile('de.keyboardsurfer.android.widget:crouton:1.8.5@aar') {
-        // exclusion is not necessary, but generally a good idea.
-        exclude group: 'com.google.android', module: 'support-v4'
-    }
-    compile 'com.google.android.gms:play-services-ads:15.0.0'
-    compile 'com.google.firebase:firebase-core:15.0.2'
-    compile 'com.google.firebase:firebase-config:15.0.2'
-    compile 'com.jonathanfinerty.once:once:1.2.2'
-
-    // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
-
-
-    compile 'com.github.bumptech.glide:glide:4.1.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.1.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.preference:preference:1.2.1'
+    implementation 'com.google.android.material:material:1.12.0'
 }
-
-/**
- * Protects the key from kids, script kiddies and dumbs.
- *
- * @param key the key to encrypt
- * @return encrypted key
- */
-// Symmetric algorithm used for ciphering/deciphering.
-def encryptPublicKey(String key, String salt) {
-    String encoded = encryptPublicKeyX(key, salt);
-    return Base64.encodeBase64URLSafeString(encoded.getBytes());
-}
-
-def encryptPublicKeyX(String key, String salt) {
-    final char[] m = key.toCharArray();
-    final char[] s = salt.toCharArray();
-
-    final int ml = m.length;
-    final int sl = s.length;
-    final char[] result = new char[ml];
-
-    for (int i = 0; i < ml; i++) {
-        result[i] = (char) (m[i] ^ s[i % sl]);
-    }
-
-    return new String(result);
-}
-
-// ADD THIS AT THE BOTTOM
-apply plugin: 'com.google.gms.google-services'

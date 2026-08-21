@@ -1,19 +1,4 @@
-<!--
-  Copyright 2014 Google Inc. All rights reserved.
-
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:key="pref_category_settings"
@@ -37,21 +22,15 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="pref_category_mobo_dev"
-        android:title="@string/pref_category_mobodev">
-
-        <io.github.mobodev.heartbeatfixerforgcm.preference.DonatePreference
-            android:key="pref_donate"
-            android:persistent="false"/>
-        <io.github.mobodev.heartbeatfixerforgcm.preference.RecommendAppPreference
-            android:key="pref_recommend"
-            android:persistent="false"/>
-        <io.github.mobodev.heartbeatfixerforgcm.preference.ShareAppPreference
-            android:key="pref_share"
-            android:persistent="false"/>
-        <io.github.mobodev.heartbeatfixerforgcm.preference.FeedbackPreference
-            android:key="pref_feedback"
-            android:persistent="false"/>
+        android:key="pref_category_permissions"
+        android:title="@string/pref_category_permissions">
+        <Preference
+            android:key="pref_exact_alarm"
+            android:persistent="false"
+            android:title="@string/pref_exact_alarm_title" />
+        <Preference
+            android:key="pref_battery_optimization"
+            android:persistent="false"
+            android:title="@string/pref_battery_optimization_title" />
     </PreferenceCategory>
-
 </PreferenceScreen>

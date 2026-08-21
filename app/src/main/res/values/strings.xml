@@ -1,61 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Heartbeat Fixer for GCM</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">Heartbeat Fixer for FCM</string>
+
+    <string name="switch_title">Heartbeat Fixer</string>
 
     <string name="pref_category_settings">Settings</string>
-    <string name="pref_category_mobodev">MoboDev</string>
-    <string name="pref_gcm_heartbeat_interval_wifi_title">GCM heartbeat interval WiFi</string>
-    <string name="pref_gcm_heartbeat_interval_mobile_title">GCM heartbeat interval Mobile</string>
+    <string name="pref_gcm_heartbeat_interval_wifi_title">Heartbeat interval WiFi</string>
+    <string name="pref_gcm_heartbeat_interval_mobile_title">Heartbeat interval Mobile</string>
 
-    <string name="toast_heartbeat_fixer_on">Heartbeat Fixer for GCM is ON</string>
-    <string name="toast_heartbeat_fixer_off">Heartbeat Fixer for GCM is OFF</string>
+    <string name="pref_category_permissions">Permissions</string>
+    <string name="pref_exact_alarm_title">Exact alarm permission</string>
+    <string name="pref_exact_alarm_summary_granted">Granted, heartbeats fire on time</string>
+    <string name="pref_exact_alarm_summary_denied">Tap to grant, otherwise heartbeats may be delayed</string>
+    <string name="pref_battery_optimization_title">Battery optimization</string>
+    <string name="pref_battery_optimization_summary_ignored">Unrestricted, heartbeats work in Doze mode</string>
+    <string name="pref_battery_optimization_summary_optimized">Tap to exempt this app for reliable heartbeats</string>
 
-    <string name="toast_play_store_unavailable">Google Play Store is not installed.</string>
+    <string name="toast_heartbeat_fixer_on">Heartbeat Fixer is ON</string>
+    <string name="toast_heartbeat_fixer_off">Heartbeat Fixer is OFF</string>
 
-    <string name="dlg_feedback_title">Feedback</string>
-    <string name="dlg_feedback_content"><![CDATA[1. Love 「Heartbeat Fixer for GCM」 , please rate <b>5 star</b> in Play Store.<br/><br/>2. Have problems, please contact developer to report issue.]]></string>
-    <string name="dlg_feedback_positive_text">Rate 5 Star</string>
-    <string name="dlg_feedback_negative_text">Contact Author</string>
-
-    <string name="pref_donate_title">Remove Banner Ad</string>
-    <string name="pref_donate_summary">「Heartbeat Fixer for GCM」 is a free software. Make a donation to remove banner ad</string>
-
-    <string name="send_to">Send to</string>
-    <string name="pref_share_app_title">Share app</string>
-    <string name="pref_share_app_description">Send app link to friends</string>
-    <string name="pref_recommend_apps_title">Recommend apps</string>
-    <string name="pref_recommend_apps_description">Awesome apps developed by me</string>
-
-    <!-- donate to developer dialog -->
-    <string name="donate_dialog_title">Donate to developer</string>
-    <string name="donate_dialog_message">「Heartbeat Fixer for GCM」 is a free and open source app. You can show your appreciation and support development by donating:</string>
-    <string name="donate_billing_not_supported">In-app purchases are not supported on the device.</string>
-    <string name="donate_thanks">Thank you very much!</string>
-    <!--
-    Simple words
-    -->
-
-    <string name="purchased">(Purchased)</string>
-    <string name="close">Close</string>
-    <string name="later">Later</string>
-    <string name="send">Send</string>
-    <string name="on">On</string>
-    <string name="off">Off</string>
-    <string name="enabled">Enabled</string>
-    <string name="disabled">Disabled</string>
-    <string name="admob_banner_unit_id">ca-app-pub-5964196502067291/5460955376</string>
-    <string name="admob_app_id">ca-app-pub-5964196502067291~1489720161</string>
-    <string name="ad_content"><![CDATA[Save, repost Photos&Videos]]></string>
-    <string name="ad_title">Insgot for Instagram</string>
-    <string name="btn_install">install</string>
-
-    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
-    <!--
-        This is the name that users will see when interacting with this channel.
-        It should describe the category of notifications that will be sent through this channel
-     -->
-    <string name="default_notification_channel_name" translatable="true">News</string>
+    <string name="snackbar_exact_alarm_needed">Exact alarm permission is required for precise heartbeats</string>
+    <string name="action_grant">Grant</string>
 </resources>

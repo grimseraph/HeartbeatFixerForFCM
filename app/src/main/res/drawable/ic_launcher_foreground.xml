@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Heartbeat / ECG pulse line (kept inside the 66x66 adaptive-icon safe zone) -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000"
+        android:pathData="M30,56 L46,56 L49,56 L53,40 L58,72 L63,30 L68,60 L71,56 L78,56" />
+
+    <!-- Broadcast signal waves rising from the pulse, suggesting a kept-alive push connection -->
+    <path
+        android:strokeColor="#FFC1E3"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M74,40 A8,8 0 0 1 82,48" />
+    <path
+        android:strokeColor="#FFC1E3"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M72,34 A14,14 0 0 1 86,48" />
+</vector>

@@ -7,3 +7,6 @@
 /build
 iab.key
 *.iml
+release.keystore
+keystore.properties
+build_release_*.log

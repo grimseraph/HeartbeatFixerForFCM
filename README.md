@@ -1,32 +1,49 @@
+## Heartbeat Fixer for FCM
 
-[![Build Status](https://travis-ci.org/shaobin0604/HeartbeatFixerForGCM.svg)](https://travis-ci.org/shaobin0604/HeartbeatFixerForGCM)
+> **Forked from** [shaobin0604/HeartbeatFixerForGCM](https://github.com/shaobin0604/HeartbeatFixerForGCM). Original © 2015 Bin Shao; modernized & maintained by [@grimseraph](https://github.com/grimseraph).
 
-[![Get it on Google Play][2]][1]
+Have you ever experienced **Push Notification Delay**, missing something important? Here is the tool for fixing the FCM (formerly GCM) heartbeat interval issue.
 
-## Heartbeat Fixer for GCM
-
-Have you ever experience **Push Notification Delay**, missing something important. Here is the tool for fixing GCM heartbeat interval issue.
+> **2026 update:** this project has been modernized. GCM was shut down in 2019, but its successor FCM (Firebase Cloud Messaging) uses the same persistent connection inside Google Play services, and the same heartbeat trick still applies.
 
 ### The Root Cause
 
-The **root** cause of this issue can be found at [Push notifications delayed, Heartbeat Interval not reliable](https://productforums.google.com/forum/#!msg/nexus/fslYqYrULto/lU2D3Qe1mugJ)
+Android keeps a single long-lived TCP connection to Google's push servers and pings it at a fixed interval (up to 28 minutes on mobile networks). On some networks (especially carrier NAT / aggressive WiFi routers), the connection is silently dropped long before the next heartbeat, so pushes are delayed until the system notices the dead connection.
 
-### How Heartbeat Fixer for GCM resolve this issue
+### How Heartbeat Fixer resolves this issue
 
-It sends an heartbeat every x minutes, where you can choose the interval. Setting it to 5 minutes will keep alive the GCM connection used for push notifications.
+It sends a heartbeat request (`GTALK_HEARTBEAT` / `MCS_HEARTBEAT` broadcast to Google Play services) every x minutes, where you can choose the interval. Setting it to 5 minutes will keep alive the FCM connection used for push notifications.
 
-### Build 
+### What was modernized (v2.0)
+
+- Gradle 8.7 + Android Gradle Plugin 8.5, `compileSdk`/`targetSdk` 34, `minSdk` 21, AndroidX + Material 3
+- Heartbeat broadcasts are now sent **explicitly** to `com.google.android.gms` / `com.google.android.gsf` (implicit broadcasts no longer reach other apps since Android 8.0)
+- `setExactAndAllowWhileIdle()` alarms with **exact-alarm permission** handling on Android 12+, and a graceful inexact fallback
+- In-app shortcuts to grant the exact-alarm permission and exempt the app from **battery optimization** (needed for reliable heartbeats in Doze mode)
+- Reschedules automatically after reboot and app updates
+- Removed all obsolete baggage: ads, in-app billing, Firebase Analytics, jcenter-only libraries (Crouton, Calligraphy, etc.)
+
+### Note on modern Android
+
+On Android 6.0+ Doze mode batches alarms; even exact "while idle" alarms are limited to roughly one per 9 minutes per app. For the most reliable results:
+
+1. Enable the fixer and grant the exact-alarm permission when prompted
+2. Tap *Battery optimization* in the app and set it to *Unrestricted*
+
+### Build
 
     ./gradlew assembleDebug
 
-## Install
+### Install
 
-   ./gradlew instDebug
+    ./gradlew installDebug
 
-### Screenshots
+### Known limitations
 
-<img src="snapshot/device-2015-03-24-231244.png" width="300px"/>
-<img src="snapshot/device-2015-03-24-231306.png" width="300px"/>
+- **Effectiveness is empirical.** The heartbeat intents (`GTALK_HEARTBEAT` / `MCS_HEARTBEAT`) are internal, undocumented Google actions. Whether the current Google Play services version still honors them is not guaranteed — the only real proof is to measure push-delivery latency with the fixer on vs. off.
+- **Force-stop breaks the chain.** If the system or a third-party task killer force-stops this app, the alarm chain stops and will not restart until the next reboot or app update (`MY_PACKAGE_REPLACED`). Keep *Battery optimization* set to *Unrestricted* and never manually force-stop the app.
+- **Requires Google Play services.** On devices without GMS installed there is no connection to keep alive, so the tool has no effect. It targets devices that ship with (or have flashed) GMS but suffer aggressive push killing by the local ROM.
+- **Exact-alarm permission matters.** On Android 12+, if the exact-alarm permission is not granted, heartbeats fall back to inexact `setAndAllowWhileIdle` scheduling and may be delayed by Doze batching (roughly one alarm per 9 minutes per app).
 
 License
 -------
@@ -44,8 +61,3 @@ License
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
-
-
- [1]: https://play.google.com/store/apps/details?id=io.github.mobodev.heartbeatfixerforgcm
- [2]: http://www.android.com/images/brand/get_it_on_play_logo_small.png
