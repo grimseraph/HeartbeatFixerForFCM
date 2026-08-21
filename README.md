@@ -62,7 +62,7 @@ Drop your `release.keystore` next to it, then:
 ./gradlew assembleRelease
 ```
 
-The signed APK lands at `app/build/outputs/apk/release/fcm.apk`.
+The signed APK lands in `app/build/outputs/apk/release/` (default name `app-release.apk`).
 
 ### One-click release via GitHub Actions
 
