@@ -32,40 +32,6 @@ On Android 6.0+ Doze mode batches alarms; even exact "while idle" alarms are lim
 1. Enable the fixer and grant the exact-alarm permission when prompted
 2. Tap *Battery optimization* in the app and set it to *Unrestricted*
 
-## Build
-
-### Prerequisites
-
-- Android SDK with `compileSdk` 34 + build-tools, and **JDK 17**
-- A signing keystore (see below); the repo does **not** contain one
-
-### Local build
-
-Debug (unsigned, for on-device testing):
-
-```bash
-./gradlew assembleDebug
-# or install straight to a connected device/emulator
-./gradlew installDebug
-```
-
-Release (signed). The build reads `<project-root>/keystore.properties`, which is git-ignored and never committed:
-
-```properties
-storeFile=release.keystore
-storePassword=*****
-keyAlias=*****
-keyPassword=*****
-```
-
-Drop your `release.keystore` next to it, then:
-
-```bash
-./gradlew assembleRelease
-```
-
-The signed APK lands in `app/build/outputs/apk/release/` as `HeartbeatFixerForFCM-v<versionName>.apk` (e.g. `HeartbeatFixerForFCM-v2.0.1.apk`).
-
 ### Known limitations
 
 - **Effectiveness is empirical.** The heartbeat intents (`GTALK_HEARTBEAT` / `MCS_HEARTBEAT`) are internal, undocumented Google actions. Whether the current Google Play services version still honors them is not guaranteed — the only real proof is to measure push-delivery latency with the fixer on vs. off.

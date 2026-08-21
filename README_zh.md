@@ -32,40 +32,6 @@ Android 6.0+ 的 Doze 模式会对闹钟进行批处理；即便是"空闲时精
 1. 开启本工具，并在提示时授予精确闹钟权限
 2. 在 App 内点击*电池优化*，将其设为*无限制*
 
-## 构建
-
-### 前置条件
-
-- Android SDK（`compileSdk` 34 + build-tools）以及 **JDK 17**
-- 一个签名 keystore（见下文）；仓库中**不包含** keystore
-
-### 本地构建
-
-调试版（未签名，用于真机测试）：
-
-```bash
-./gradlew assembleDebug
-# 或直接安装到已连接的设备/模拟器
-./gradlew installDebug
-```
-
-发布版（已签名）。构建会读取 `<项目根目录>/keystore.properties`，该文件已被 git 忽略、永不提交：
-
-```properties
-storeFile=release.keystore
-storePassword=*****
-keyAlias=*****
-keyPassword=*****
-```
-
-把你的 `release.keystore` 放在同目录，然后：
-
-```bash
-./gradlew assembleRelease
-```
-
-签名后的 APK 生成在 `app/build/outputs/apk/release/`，文件名为 `HeartbeatFixerForFCM-v<versionName>.apk`（例如 `HeartbeatFixerForFCM-v2.0.1.apk`，文件名内嵌版本号）。
-
 ### 已知限制
 
 - **效果需实测验证。** 心跳 intent（`GTALK_HEARTBEAT` / `MCS_HEARTBEAT`）是 Google 内部、未公开的 action。当前版本的 Google Play 服务是否仍响应它们并无官方保证——唯一可靠的证明，是开关本工具分别测量推送到达时延。
