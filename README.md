@@ -1,3 +1,5 @@
+[English](README.md) · [简体中文](README_zh.md)
+
 ## Heartbeat Fixer for FCM
 
 > **Forked from** [shaobin0604/HeartbeatFixerForGCM](https://github.com/shaobin0604/HeartbeatFixerForGCM). Original © 2015 Bin Shao; modernized & maintained by [@grimseraph](https://github.com/grimseraph).
@@ -62,11 +64,11 @@ Drop your `release.keystore` next to it, then:
 ./gradlew assembleRelease
 ```
 
-The signed APK lands in `app/build/outputs/apk/release/` as `HeartbeatFixerForFCM-v2.0.0.apk` (the file name embeds the version).
+The signed APK lands in `app/build/outputs/apk/release/` as `HeartbeatFixerForFCM-v<versionName>.apk` (e.g. `HeartbeatFixerForFCM-v2.0.1.apk`).
 
 ### One-click release via GitHub Actions
 
-Pushing a tag such as `v2.0.0` (or running the workflow manually from the **Actions** tab) builds a signed release APK on GitHub and publishes it as a GitHub Release.
+Pushing a tag such as `v2.0.1` (or running the workflow manually from the **Actions** tab) builds a signed release APK on GitHub and publishes it as a GitHub Release.
 
 The signing keystore is reconstructed in CI from repository **secrets** — it is never stored in the repo. Add these four secrets under **Settings → Secrets and variables → Actions**:
 
@@ -86,11 +88,11 @@ base64 -w0 release.keystore
 Copy the output — one long line — into the `KEYSTORE_BASE64` secret. Then tag and push to trigger the build:
 
 ```bash
-git tag v2.0.0
-git push origin v2.0.0
+git tag v2.0.1
+git push origin v2.0.1
 ```
 
-Watch the run under the **Actions** tab; when it finishes, the signed `HeartbeatFixerForFCM-v2.0.0.apk` is attached to the release on the **Releases** page.
+Watch the run under the **Actions** tab; when it finishes, the signed `HeartbeatFixerForFCM-v2.0.1.apk` is attached to the release on the **Releases** page.
 
 ### Known limitations
 
