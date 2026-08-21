@@ -30,13 +30,67 @@ On Android 6.0+ Doze mode batches alarms; even exact "while idle" alarms are lim
 1. Enable the fixer and grant the exact-alarm permission when prompted
 2. Tap *Battery optimization* in the app and set it to *Unrestricted*
 
-### Build
+## Build & Release
 
-    ./gradlew assembleDebug
+### Prerequisites
 
-### Install
+- Android SDK with `compileSdk` 34 + build-tools, and **JDK 17**
+- A signing keystore (see below); the repo does **not** contain one
 
-    ./gradlew installDebug
+### Local build
+
+Debug (unsigned, for on-device testing):
+
+```bash
+./gradlew assembleDebug
+# or install straight to a connected device/emulator
+./gradlew installDebug
+```
+
+Release (signed). The build reads `<project-root>/keystore.properties`, which is git-ignored and never committed:
+
+```properties
+storeFile=release.keystore
+storePassword=*****
+keyAlias=*****
+keyPassword=*****
+```
+
+Drop your `release.keystore` next to it, then:
+
+```bash
+./gradlew assembleRelease
+```
+
+The signed APK lands at `app/build/outputs/apk/release/fcm.apk`.
+
+### One-click release via GitHub Actions
+
+Pushing a tag such as `v2.0.0` (or running the workflow manually from the **Actions** tab) builds a signed release APK on GitHub and publishes it as a GitHub Release.
+
+The signing keystore is reconstructed in CI from repository **secrets** — it is never stored in the repo. Add these four secrets under **Settings → Secrets and variables → Actions**:
+
+| Secret | Value |
+| --- | --- |
+| `KEYSTORE_BASE64` | base64 of your `release.keystore` (single line, no line wraps) |
+| `KEYSTORE_PASSWORD` | keystore store password |
+| `KEY_ALIAS` | key alias |
+| `KEY_PASSWORD` | key password |
+
+To produce `KEYSTORE_BASE64` locally (from the project root, where `release.keystore` lives):
+
+```bash
+base64 -w0 release.keystore
+```
+
+Copy the output — one long line — into the `KEYSTORE_BASE64` secret. Then tag and push to trigger the build:
+
+```bash
+git tag v2.0.0
+git push origin v2.0.0
+```
+
+Watch the run under the **Actions** tab; when it finishes, the signed `fcm.apk` is attached to the release on the **Releases** page.
 
 ### Known limitations
 
