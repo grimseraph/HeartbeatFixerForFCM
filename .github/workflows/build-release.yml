@@ -57,6 +57,24 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
+          body: |
+            ## Heartbeat Fixer for FCM — modernized fork
+
+            Maintained fork of [HeartbeatFixerForGCM](https://github.com/shaobin0604/HeartbeatFixerForGCM) (© 2015 Bin Shao). GCM was shut down in 2019, but FCM (Firebase Cloud Messaging) keeps the same persistent connection inside Google Play services — and the same heartbeat trick still works. This app keeps that connection alive on devices where the local ROM aggressively kills FCM pushes.
+
+            ### What was modernized (v2.0)
+            - **Re-targeted to FCM** — heartbeat broadcasts are now sent *explicitly* to `com.google.android.gms` / `com.google.android.gsf`. Implicit broadcasts stopped reaching other apps on Android 8.0, which is why the original silently broke.
+            - **Doze-aware scheduling** — `setExactAndAllowWhileIdle()` with Android 12+ exact-alarm permission handling and a graceful inexact fallback.
+            - **Survives reboots & updates** — `BootReceiver` replaces the old `NetworkStateReceiver` (its `CONNECTIVITY_CHANGE` broadcast stopped firing on Android 7); the alarm chain self-reschedules after boot and app updates (`MY_PACKAGE_REPLACED`).
+            - **Modern stack** — Gradle 8.7 / AGP 8.5.2, `compileSdk`/`targetSdk` 34, AndroidX + Material 3 UI (master switch, interval picker, one-tap shortcuts for exact-alarm permission and battery-optimization exemption).
+            - **Less bloat** — removed ads, in-app billing, Firebase Analytics and other obsolete libraries (~30 classes → 4 core classes).
+
+            ### Read before use
+            - **Effectiveness is empirical.** The `GTALK_HEARTBEAT` / `MCS_HEARTBEAT` intents are internal, undocumented Google actions. Whether the current Play services version honors them is not guaranteed — the only real proof is measuring push latency on vs. off.
+            - **Force-stop breaks the chain.** Force-stopping the app kills the alarm chain until the next reboot/update. Keep battery optimization *Unrestricted* and never manually force-stop it.
+            - **Requires Google Play services (GMS).** Devices without GMS have nothing to keep alive.
+
+            Signed release APK is attached below. Build and install instructions are in the README.
           files: app/build/outputs/apk/release/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

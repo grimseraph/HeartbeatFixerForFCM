@@ -18,10 +18,10 @@ android {
         minSdk 21
         targetSdk 34
         // versionCode must stay monotonic and never drop below the
-        // previously-shipped 202600700 (old mobodev package); 202608210
-        // == 2026-08-21 build #0, safely above that floor.
-        versionCode 202608210
-        versionName "2.0.0"
+        // previously-shipped 202600700 (old mobodev package); 202608211
+        // == 2026-08-21 build #1, safely above that floor.
+        versionCode 202608211
+        versionName "2.0.1"
     }
 
     signingConfigs {
