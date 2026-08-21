@@ -32,7 +32,7 @@ On Android 6.0+ Doze mode batches alarms; even exact "while idle" alarms are lim
 1. Enable the fixer and grant the exact-alarm permission when prompted
 2. Tap *Battery optimization* in the app and set it to *Unrestricted*
 
-## Build & Release
+## Build
 
 ### Prerequisites
 
@@ -65,34 +65,6 @@ Drop your `release.keystore` next to it, then:
 ```
 
 The signed APK lands in `app/build/outputs/apk/release/` as `HeartbeatFixerForFCM-v<versionName>.apk` (e.g. `HeartbeatFixerForFCM-v2.0.1.apk`).
-
-### One-click release via GitHub Actions
-
-Pushing a tag such as `v2.0.1` (or running the workflow manually from the **Actions** tab) builds a signed release APK on GitHub and publishes it as a GitHub Release.
-
-The signing keystore is reconstructed in CI from repository **secrets** — it is never stored in the repo. Add these four secrets under **Settings → Secrets and variables → Actions**:
-
-| Secret | Value |
-| --- | --- |
-| `KEYSTORE_BASE64` | base64 of your `release.keystore` (single line, no line wraps) |
-| `KEYSTORE_PASSWORD` | keystore store password |
-| `KEY_ALIAS` | key alias |
-| `KEY_PASSWORD` | key password |
-
-To produce `KEYSTORE_BASE64` locally (from the project root, where `release.keystore` lives):
-
-```bash
-base64 -w0 release.keystore
-```
-
-Copy the output — one long line — into the `KEYSTORE_BASE64` secret. Then tag and push to trigger the build:
-
-```bash
-git tag v2.0.1
-git push origin v2.0.1
-```
-
-Watch the run under the **Actions** tab; when it finishes, the signed `HeartbeatFixerForFCM-v2.0.1.apk` is attached to the release on the **Releases** page.
 
 ### Known limitations
 

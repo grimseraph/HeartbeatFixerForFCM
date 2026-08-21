@@ -32,7 +32,7 @@ Android 6.0+ 的 Doze 模式会对闹钟进行批处理；即便是"空闲时精
 1. 开启本工具，并在提示时授予精确闹钟权限
 2. 在 App 内点击*电池优化*，将其设为*无限制*
 
-## 构建与发布
+## 构建
 
 ### 前置条件
 
@@ -65,34 +65,6 @@ keyPassword=*****
 ```
 
 签名后的 APK 生成在 `app/build/outputs/apk/release/`，文件名为 `HeartbeatFixerForFCM-v<versionName>.apk`（例如 `HeartbeatFixerForFCM-v2.0.1.apk`，文件名内嵌版本号）。
-
-### 通过 GitHub Actions 一键发布
-
-推送一个形如 `v2.0.1` 的标签（或在 **Actions** 标签页手动运行工作流），即可在 GitHub 上构建签名发布版 APK 并作为 GitHub Release 发布。
-
-签名 keystore 在 CI 中由仓库 **secrets** 还原——它从不存入仓库。在 **Settings → Secrets and variables → Actions** 下添加以下四个 secrets：
-
-| Secret | 取值 |
-| --- | --- |
-| `KEYSTORE_BASE64` | 你的 `release.keystore` 的 base64（单行，无换行） |
-| `KEYSTORE_PASSWORD` | keystore 的 store 密码 |
-| `KEY_ALIAS` | 密钥别名 |
-| `KEY_PASSWORD` | 密钥密码 |
-
-在本地生成 `KEYSTORE_BASE64`（在项目根目录，即 `release.keystore` 所在位置）：
-
-```bash
-base64 -w0 release.keystore
-```
-
-复制输出——一整行长字符串——粘贴进 `KEYSTORE_BASE64` secret。然后打标签并推送以触发构建：
-
-```bash
-git tag v2.0.1
-git push origin v2.0.1
-```
-
-在 **Actions** 标签页观察运行；完成后，签名后的 `HeartbeatFixerForFCM-v2.0.1.apk` 会作为附件出现在 **Releases** 页面。
 
 ### 已知限制
 
